@@ -2,7 +2,9 @@ package com.example.restservice;
 
 import org.springframework.data.map.repository.config.EnableMapRepositories;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+// import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,8 +12,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Repository
 @EnableMapRepositories
 public class CarsService {
+  // @Autowired
   private final CrudRepository<Cars, Long> repository;
 
   public CarsService(CrudRepository<Cars, Long> repository) {
