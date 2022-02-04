@@ -15,20 +15,18 @@ public class CarsService {
   private final CrudRepository<Cars, Long> repository;
 
   public CarsService(CrudRepository<Cars, Long> repository) {
-
     this.repository = repository;
-
     this.repository.saveAll(defaultItems());
   }
 
   private static List<Cars> defaultItems() {
-    return List.of(new Cars(1, "make", "model", "colour", 1));
+    return List.of(new Cars(1L, "make", "model", "colour", 1L));
   }
 
   public List<Cars> findAll() {
     List<Cars> list = new ArrayList<>();
-    Iterable<Cars> items = repository.findAll();
-    items.forEach(list::add);
+    Iterable<Cars> cars = repository.findAll();
+    cars.forEach(list::add);
     return list;
   }
 
@@ -48,11 +46,11 @@ public class CarsService {
     return repository.save(copy);
   }
 
-  public Optional<Cars> update(Long id, Cars newCars) {
-    // Only update an item if it can be found first.
+  public Optional<Cars> update(Long id, Cars newCar) {
+    // Only update a car if it can be found first.
     return repository.findById(id)
         .map(oldCar -> {
-          Cars updated = oldCar.updateWith(newCars);
+          Cars updated = oldCar.updateWith(newCar);
           return repository.save(updated);
         });
   }
