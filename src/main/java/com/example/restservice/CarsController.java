@@ -1,7 +1,6 @@
 package com.example.restservice;
 
 import org.springframework.http.ResponseEntity;
-// compact imports
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
