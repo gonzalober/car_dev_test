@@ -23,21 +23,22 @@ public class CarsController {
   }
 
   @GetMapping
-  public ResponseEntity<List<Cars>> findAll() {
-    List<Cars> items = service.findAll();
-    return ResponseEntity.ok().body(items);
+  public ResponseEntity<List<Car>> findAll() {
+    List<Car> cars = service.findAll();
+    System.out.println("CONTROLLER ------>>>>>");
+    return ResponseEntity.ok().body(cars);
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<Cars> find(@PathVariable("id") Long id) {
-    Optional<Cars> item = service.find(id);
+  public ResponseEntity<Car> find(@PathVariable("id") Long id) {
+    Optional<Car> item = service.find(id);
     return ResponseEntity.of(item);
   }
 
   // post
   @PostMapping
-  public ResponseEntity<Cars> create(@RequestBody Cars cars) {
-    Cars created = service.create(cars);
+  public ResponseEntity<Car> create(@RequestBody Car cars) {
+    Car created = service.create(cars);
     URI location = ServletUriComponentsBuilder.fromCurrentRequest()
         .path("/{id}")
         .buildAndExpand(created.getId())
@@ -47,16 +48,16 @@ public class CarsController {
 
   // PUT
   @PutMapping("/{id}")
-  public ResponseEntity<Cars> update(
+  public ResponseEntity<Car> update(
       @PathVariable("id") Long id,
-      @RequestBody Cars updatedItem) {
+      @RequestBody Car updatedItem) {
 
-    Optional<Cars> updated = service.update(id, updatedItem);
+    Optional<Car> updated = service.update(id, updatedItem);
 
     return updated
         .map(value -> ResponseEntity.ok().body(value))
         .orElseGet(() -> {
-          Cars created = service.create(updatedItem);
+          Car created = service.create(updatedItem);
           URI location = ServletUriComponentsBuilder.fromCurrentRequest()
               .path("/{id}")
               .buildAndExpand(created.getId())
@@ -67,7 +68,7 @@ public class CarsController {
 
   // DELETE
   @DeleteMapping("/{id}")
-  public ResponseEntity<Cars> delete(@PathVariable("id") Long id) {
+  public ResponseEntity<Car> delete(@PathVariable("id") Long id) {
     service.delete(id);
     return ResponseEntity.noContent().build();
   }

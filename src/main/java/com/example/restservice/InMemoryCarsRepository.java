@@ -7,23 +7,29 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class InMemoryCarsRepository implements CrudRepository<Cars, Long> {
+public class InMemoryCarsRepository implements CrudRepository<Car, Long> {
 
   @Override
-  public <S extends Cars> S save(S entity) {
+  public <S extends Car> S save(S entity) {
     // TODO Auto-generated method stub
     return null;
   }
 
   @Override
-  public <S extends Cars> Iterable<S> saveAll(Iterable<S> entities) {
+  public <S extends Car> Iterable<S> saveAll(Iterable<S> entities) {
     // TODO Auto-generated method stub
-    return null;
+
+    Iterable<S> result = new ArrayList<S>();
+    for (S entity : entities) {
+      ((ArrayList<S>) result).add(save(entity));
+    }
+    System.out.println("MEMORY---->1" + result);
+    return result;
   }
 
   @Override
-  public Optional<Cars> findById(Long id) {
-    return Optional.of(new Cars(1L, "make", "model", "colour", 2L));
+  public Optional<Car> findById(Long id) {
+    return Optional.of(new Car(1L, "make", "model", "colour", 2L));
   }
 
   @Override
@@ -33,14 +39,16 @@ public class InMemoryCarsRepository implements CrudRepository<Cars, Long> {
   }
 
   @Override
-  public Iterable<Cars> findAll() {
+  public Iterable<Car> findAll() {
+    System.out.println("MEMORY");
 
-    return new ArrayList<>();
+    return null;
   }
 
   @Override
-  public Iterable<Cars> findAllById(Iterable<Long> ids) {
+  public Iterable<Car> findAllById(Iterable<Long> ids) {
     // TODO Auto-generated method stub
+
     return null;
   }
 
@@ -57,7 +65,7 @@ public class InMemoryCarsRepository implements CrudRepository<Cars, Long> {
   }
 
   @Override
-  public void delete(Cars entity) {
+  public void delete(Car entity) {
     // TODO Auto-generated method stub
 
   }
@@ -69,7 +77,7 @@ public class InMemoryCarsRepository implements CrudRepository<Cars, Long> {
   }
 
   @Override
-  public void deleteAll(Iterable<? extends Cars> entities) {
+  public void deleteAll(Iterable<? extends Car> entities) {
     // TODO Auto-generated method stub
 
   }

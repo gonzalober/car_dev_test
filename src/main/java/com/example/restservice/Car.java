@@ -2,7 +2,7 @@ package com.example.restservice;
 
 import org.springframework.data.annotation.Id;
 
-public class Cars {
+public class Car {
 
 	private final Long id;
 	private final String make;
@@ -10,7 +10,7 @@ public class Cars {
 	private final String colour;
 	private final Long year;
 
-	public Cars(Long id, String make, String model, String colour, Long year) {
+	public Car(Long id, String make, String model, String colour, Long year) {
 		this.id = id;
 		this.make = make;
 		this.model = model;
@@ -40,7 +40,7 @@ public class Cars {
 		return year;
 	}
 
-	public Cars updateWith(Cars cars) {
-		return new Cars(this.id, cars.make, cars.model, cars.colour, cars.year);
+	public Car updateWith(Car car) {
+		return new Car(this.id, car.make, car.model, car.colour, car.year);
 	}
 }

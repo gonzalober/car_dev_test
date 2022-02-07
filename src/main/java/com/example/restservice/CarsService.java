@@ -16,32 +16,34 @@ import java.util.Optional;
 @EnableMapRepositories
 public class CarsService {
 
-  private final CrudRepository<Cars, Long> repository;
+  private final CrudRepository<Car, Long> repository;
 
-  public CarsService(@Autowired CrudRepository<Cars, Long> repository) {
+  public CarsService(@Autowired CrudRepository<Car, Long> repository) {
     this.repository = repository;
     this.repository.saveAll(defaultItems());
   }
 
-  private static List<Cars> defaultItems() {
-    return List.of(new Cars(1L, "make", "model", "colour", 1L));
+  private static List<Car> defaultItems() {
+    return List.of(new Car(1L, "make", "model", "colour", 1L));
   }
 
-  public List<Cars> findAll() {
-    List<Cars> list = new ArrayList<>();
-    Iterable<Cars> cars = repository.findAll();
-    cars.forEach(list::add);
+  public List<Car> findAll() {
+    List<Car> list = new ArrayList<>();
+    System.out.println("CARSSERVICE==> 1" + repository);
+    Iterable<Car> car = repository.findAll();
+    System.out.println("CARSSERVICE===>2" + car);
+    car.forEach(list::add);
     return list;
   }
 
-  public Optional<Cars> find(Long id) {
+  public Optional<Car> find(Long id) {
     return repository.findById(id);
   }
 
-  public Cars create(Cars cars) {
+  public Car create(Car cars) {
     // To ensure the item ID remains unique,
     // use the current timestamp.
-    Cars copy = new Cars(
+    Car copy = new Car(
         new Date().getTime(),
         cars.getMake(),
         cars.getModel(),
@@ -50,11 +52,11 @@ public class CarsService {
     return repository.save(copy);
   }
 
-  public Optional<Cars> update(Long id, Cars newCar) {
+  public Optional<Car> update(Long id, Car newCar) {
     // Only update a car if it can be found first.
     return repository.findById(id)
         .map(oldCar -> {
-          Cars updated = oldCar.updateWith(newCar);
+          Car updated = oldCar.updateWith(newCar);
           return repository.save(updated);
         });
   }
