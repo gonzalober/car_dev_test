@@ -1,24 +1,27 @@
 package com.example.restservice;
 
-import org.springframework.data.annotation.Id;
+import javax.persistence.*;
 
+@Entity
+@Table
 public class Car {
 
+	@Id
+	@SequenceGenerator(name = "car_sequence", sequenceName = "car_sequence", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "car_sequence")
 	private final Long id;
 	private final String make;
 	private final String model;
 	private final String colour;
-	private final Long year;
+	private final Integer year;
 
-	public Car(Long id, String make, String model, String colour, Long year) {
+	public Car(Long id, String make, String model, String colour, Integer year) {
 		this.id = id;
 		this.make = make;
 		this.model = model;
 		this.colour = colour;
 		this.year = year;
 	}
-
-	@Id
 
 	public Long getId() {
 		return id;
@@ -36,11 +39,7 @@ public class Car {
 		return colour;
 	}
 
-	public Long getYear() {
+	public Integer getYear() {
 		return year;
-	}
-
-	public Car updateWith(Car car) {
-		return new Car(this.id, car.make, car.model, car.colour, car.year);
 	}
 }
