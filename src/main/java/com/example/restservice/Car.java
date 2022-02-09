@@ -42,4 +42,15 @@ public class Car {
 	public Integer getYear() {
 		return year;
 	}
+
+	@Override
+	public String toString() {
+		return "Car{" +
+				"id=" + id +
+				", make='" + make + '\'' +
+				", model='" + model + '\'' +
+				", colour=" + colour +
+				", year=" + year +
+				'}';
+	}
 }
