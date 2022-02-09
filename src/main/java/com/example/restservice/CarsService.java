@@ -7,7 +7,7 @@ import java.util.List;
 
 @Service
 public class CarsService {
-  
+
   private final CarsRepository carsRepository;
 
   @Autowired
@@ -16,6 +16,7 @@ public class CarsService {
   }
 
   public List<Car> getCars() {
+    // return List.of(new Car(1L, "ford", "F100", "yellow", 1986));
     return carsRepository.findAll();
   }
 

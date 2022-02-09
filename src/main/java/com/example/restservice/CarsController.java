@@ -13,23 +13,23 @@ import java.util.List;
 @RequestMapping("api/menu/cars")
 public class CarsController {
 
-  private final CarsService service;
+  private final CarsService carService;
 
   @Autowired
-  public CarsController(CarsService service) {
-    this.service = service;
+  public CarsController(CarsService carService) {
+    this.carService = carService;
   }
 
   // get
   @GetMapping
   public List<Car> getCars() {
-    return service.getCars();
+    return carService.getCars();
   }
 
   // post
   @PostMapping
   public void addNewCar(@RequestBody Car car) {
-    service.addNewCar(car);
+    carService.addNewCar(car);
   }
 
 }

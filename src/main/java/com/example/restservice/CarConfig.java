@@ -12,10 +12,10 @@ public class CarConfig {
   @Bean
   CommandLineRunner commandLineRunner(CarsRepository repository) {
     return args -> {
-
-      System.out.println("CARCONFIG===>2");
+      Car ford = new Car(1L, "ford", "F100", "yellow", 1986);
+      // System.out.println("CARCONFIG===>2");
       repository.saveAll(
-          List.of(new Car(1L, "ford", "F100", "yellow", 1986)));
+          List.of(ford));
     };
   }
 }

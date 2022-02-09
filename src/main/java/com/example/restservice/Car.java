@@ -9,11 +9,14 @@ public class Car {
 	@Id
 	@SequenceGenerator(name = "car_sequence", sequenceName = "car_sequence", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "car_sequence")
-	private final Long id;
-	private final String make;
-	private final String model;
-	private final String colour;
-	private final Integer year;
+	private Long id;
+	private String make;
+	private String model;
+	private String colour;
+	private Integer year;
+
+	public Car() {
+	}
 
 	public Car(Long id, String make, String model, String colour, Integer year) {
 		this.id = id;
