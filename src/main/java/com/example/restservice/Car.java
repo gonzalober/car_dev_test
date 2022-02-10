@@ -56,4 +56,12 @@ public class Car {
 				", year=" + year +
 				'}';
 	}
+
+	public void setModel(String model) {
+		this.model = model;
+	}
+
+	public void setMake(String make) {
+		this.make = make;
+	}
 }

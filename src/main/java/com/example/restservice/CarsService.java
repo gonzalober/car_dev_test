@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
+
+import javax.transaction.Transactional;
 
 @Service
 public class CarsService {
@@ -21,7 +24,28 @@ public class CarsService {
   }
 
   public void addNewCar(Car car) {
-    System.out.println("sevie");
     carsRepository.save(car);
+  }
+
+  public void deleteCar(Long id) {
+    boolean exists = carsRepository.existsById(id);
+    if (!exists) {
+      throw new IllegalStateException("car with id " + id + " does not exist");
+    }
+    carsRepository.deleteById(id);
+  }
+
+  @Transactional
+  public void updateCar(Long carId, String model, String make) {
+    Car car = carsRepository.findById(carId)
+        .orElseThrow(() -> new IllegalStateException("car with id " + carId + " does not exist"));
+
+    if (model != null && model.length() > 0 && !Objects.equals(car.getModel(), model)) {
+      car.setModel(model);
+    }
+
+    if (make != null && make.length() > 0 && !Objects.equals(car.getMake(), make)) {
+      car.setMake(make);
+    }
   }
 }
