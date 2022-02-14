@@ -1,10 +1,16 @@
 package com.example.restservice;
 
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.booleanThat;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Optional;
+
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -13,7 +19,11 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.util.Assert;
+
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @ExtendWith(MockitoExtension.class)
 public class CarsServiceTests {
@@ -21,11 +31,29 @@ public class CarsServiceTests {
   @Mock
   private CarsRepository carsRepository;
 
+  @InjectMocks
   private CarsService underTest;
 
   @BeforeEach
   void setUp() {
     underTest = new CarsService(carsRepository);
+  }
+
+  @Test
+  public void canDeleteCar() {
+    final Car car = new Car(1L, "ford", "F100", "yellow", 1986);
+    final Car car2 = null;
+
+    Mockito.when(carsRepository.findById(anyLong())).thenReturn(Optional.of(car)).thenReturn(null);
+
+    // when
+    underTest.addNewCar(car);
+
+    carsRepository.findById(1L);
+
+    carsRepository.deleteById(car.getId());
+
+    assertEquals(car2, carsRepository.findById(1L));
   }
 
   @Test
@@ -61,21 +89,6 @@ public class CarsServiceTests {
     assertThatThrownBy(() -> underTest.deleteCar(car.getId()))
         .isInstanceOf(IllegalStateException.class)
         .hasMessageContaining("car with id " + car.getId() + " does not exist");
-
-  }
-
-  @Test
-  void canDeleteCar() {
-    // given
-    Long id = 1L;
-    Car car = new Car(id, "ford", "F100", "yellow", 1986);
-    Car car2 = new Car(id, "ford", "F100", "yellow", 1986);
-
-    when(carsRepository.selectExistsId(anyLong())).thenReturn(true);
-    // (carsRepository.selectExistsId(car.getId())).willReturn(true);
-    underTest.deleteCar(id);
-
-    verify(carsRepository, times(1)).delete(car2);
 
   }
 

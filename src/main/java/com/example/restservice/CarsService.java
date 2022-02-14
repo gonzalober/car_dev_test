@@ -27,12 +27,13 @@ public class CarsService {
     carsRepository.save(car);
   }
 
-  public void deleteCar(Long id) {
+  public boolean deleteCar(Long id) {
     boolean exists = carsRepository.existsById(id);
     if (!exists) {
       throw new IllegalStateException("car with id " + id + " does not exist");
     }
     carsRepository.deleteById(id);
+    return true;
   }
 
   @Transactional
