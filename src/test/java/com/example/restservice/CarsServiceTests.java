@@ -41,13 +41,14 @@ public class CarsServiceTests {
 
   @Test
   public void canDeleteCar() {
+    // given
     final Car car = new Car(1L, "ford", "F100", "yellow", 1986);
     final Car car2 = null;
 
-    Mockito.when(carsRepository.findById(anyLong())).thenReturn(Optional.of(car)).thenReturn(null);
-
     // when
     underTest.addNewCar(car);
+
+    Mockito.when(carsRepository.findById(anyLong())).thenReturn(Optional.of(car)).thenReturn(null);
 
     carsRepository.findById(1L);
 
