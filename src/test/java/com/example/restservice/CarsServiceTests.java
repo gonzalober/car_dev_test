@@ -7,7 +7,6 @@ import static org.mockito.Mockito.when;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -87,8 +86,15 @@ public class CarsServiceTests {
   }
 
   @Test
-  @Disabled
   void testUpdateCar() {
-
+    Long id = 1L;
+    Car car = new Car(id, "ford", "F100", "yellow", 1986);
+    Car car2 = new Car(id, "GM", "Avalanche", "yellow", 1986);
+    underTest.addNewCar(car);
+    when(carsRepository.findById(anyLong())).thenReturn(Optional.of(car)).thenReturn(null);
+    underTest.updateCar(1L, "Avalanche", "GM");
+    System.out.println(car2);
+    System.out.println("H" + car);
+    assertThat(car).usingRecursiveComparison().isEqualTo(car2);
   }
 }
