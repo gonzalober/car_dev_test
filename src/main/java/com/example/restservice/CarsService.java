@@ -9,6 +9,8 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import com.example.exception.ApiRequestException;
+
 @Service
 public class CarsService {
 
@@ -28,6 +30,13 @@ public class CarsService {
   }
 
   public void addNewCar(Car car) {
+    String makeCar = car.getMake();
+    String modelCar = car.getModel();
+    String colourCar = car.getColour();
+    Integer yearCar = car.getYear();
+    if (makeCar == null || modelCar == null || colourCar == null || yearCar == null) {
+      throw new ApiRequestException("bad request. Mandatory car attributes are missing");
+    }
     carsRepository.save(car);
   }
 

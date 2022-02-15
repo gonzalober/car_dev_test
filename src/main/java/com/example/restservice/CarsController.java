@@ -51,13 +51,6 @@ public class CarsController {
   // post
   @PostMapping
   public void addNewCar(@RequestBody Car car) {
-    String makeCar = car.getMake();
-    String modelCar = car.getModel();
-    String colourCar = car.getColour();
-    Integer yearCar = car.getYear();
-    if (makeCar == null || modelCar == null || colourCar == null || yearCar == null) {
-      throw new ApiRequestException("bad request. Mandatory car attributes are missing");
-    }
     carService.addNewCar(car);
   }
 

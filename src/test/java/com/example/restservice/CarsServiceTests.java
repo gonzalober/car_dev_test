@@ -6,6 +6,8 @@ import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 
+import com.example.exception.ApiRequestException;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +18,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 public class CarsServiceTests {
@@ -75,6 +79,21 @@ public class CarsServiceTests {
   }
 
   @Test
+  void canAddNewCarMissingAttributes() {
+    // given
+    String make = null;
+    Car car = new Car(1L, make, "F100", "yellow", 1986);
+    Exception exception = assertThrows(ApiRequestException.class, () -> {
+      underTest.addNewCar(car);
+    });
+
+    String expectedMessage = "bad request. Mandatory car attributes are missing";
+    String actualMessage = exception.getMessage();
+    assertTrue(actualMessage.contains(expectedMessage));
+
+  }
+
+  @Test
   void cantDeleteCarBecauseDoesNotExist() {
     // given
     String make = "ford";
@@ -93,8 +112,6 @@ public class CarsServiceTests {
     underTest.addNewCar(car);
     when(carsRepository.findById(anyLong())).thenReturn(Optional.of(car)).thenReturn(null);
     underTest.updateCar(1L, "Avalanche", "GM");
-    System.out.println(car2);
-    System.out.println("H" + car);
     assertThat(car).usingRecursiveComparison().isEqualTo(car2);
   }
 }
