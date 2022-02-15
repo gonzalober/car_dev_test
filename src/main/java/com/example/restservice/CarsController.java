@@ -9,8 +9,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
+import java.util.Optional;
+
+import com.example.exception.ApiRequestException;
 
 @RestController
 @RequestMapping("api/menu/cars")
@@ -27,6 +31,20 @@ public class CarsController {
   @GetMapping
   public List<Car> getCars() {
     return carService.getCars();
+  }
+
+  // getById
+  @GetMapping("{carId}")
+  @ResponseBody
+  public Optional<Car> getCarsById(@PathVariable("carId") Long carId) {
+    Optional<Car> car = carService.getCarsById(carId);
+    System.out.println("---->" + car.isEmpty());
+    if (car.isEmpty()) {
+      throw new ApiRequestException("the car " + carId + " doens't exist");
+    }
+    return carService.getCarsById(carId);
+    // return ResponseEntity.status(HttpStatus.OK).body(car.get());
+
   }
 
   // post

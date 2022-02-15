@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -21,6 +22,10 @@ public class CarsService {
   public List<Car> getCars() {
     // return List.of(new Car(1L, "ford", "F100", "yellow", 1986));
     return carsRepository.findAll();
+  }
+
+  public Optional<Car> getCarsById(Long id) {
+    return carsRepository.findById(id);
   }
 
   public void addNewCar(Car car) {
@@ -49,4 +54,5 @@ public class CarsService {
       car.setMake(make);
     }
   }
+
 }

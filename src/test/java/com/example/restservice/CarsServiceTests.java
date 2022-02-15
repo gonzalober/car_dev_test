@@ -2,6 +2,7 @@ package com.example.restservice;
 
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 
@@ -40,7 +41,7 @@ public class CarsServiceTests {
     // when
     underTest.addNewCar(car);
 
-    Mockito.when(carsRepository.findById(anyLong())).thenReturn(Optional.of(car)).thenReturn(null);
+    when(carsRepository.findById(anyLong())).thenReturn(Optional.of(car)).thenReturn(null);
 
     carsRepository.findById(1L);
 
