@@ -1,6 +1,8 @@
 package com.example.restservice;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.Errors;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,13 +45,19 @@ public class CarsController {
       throw new ApiRequestException("the car " + carId + " doens't exist");
     }
     return carService.getCarsById(carId);
-    // return ResponseEntity.status(HttpStatus.OK).body(car.get());
 
   }
 
   // post
   @PostMapping
   public void addNewCar(@RequestBody Car car) {
+    String makeCar = car.getMake();
+    String modelCar = car.getModel();
+    String colourCar = car.getColour();
+    Integer yearCar = car.getYear();
+    if (makeCar == null || modelCar == null || colourCar == null || yearCar == null) {
+      throw new ApiRequestException("bad request. Mandatory car attributes are missing");
+    }
     carService.addNewCar(car);
   }
 
