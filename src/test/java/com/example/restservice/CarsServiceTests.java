@@ -6,7 +6,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 
-import com.example.exception.ApiRequestException;
+import org.springframework.http.MediaType;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,24 +15,40 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@WebMvcTest(CarsController.class)
 @ExtendWith(MockitoExtension.class)
+@AutoConfigureMockMvc
 public class CarsServiceTests {
 
   @Mock
   private CarsRepository carsRepository;
 
+  @MockBean
+  private CarsController carsController;
+
   @InjectMocks
   private CarsService underTest;
+
+  @Autowired
+  MockMvc mockMvc;
 
   @BeforeEach
   void setUp() {
     underTest = new CarsService(carsRepository);
+    this.mockMvc = MockMvcBuilders.standaloneSetup(underTest).build();
+
   }
 
   @Test
@@ -40,7 +56,6 @@ public class CarsServiceTests {
     // given
     final Car car = new Car(1L, "ford", "F100", "yellow", 1986);
     final Car car2 = null;
-
     // when
     underTest.addNewCar(car);
 
@@ -51,6 +66,17 @@ public class CarsServiceTests {
     carsRepository.deleteById(car.getId());
 
     assertEquals(car2, carsRepository.findById(1L));
+  }
+
+  @Test
+  void cantDeleteCarBecauseDoesNotExist() throws Exception {
+    // given
+
+    mockMvc
+        .perform(MockMvcRequestBuilders
+            .delete("/api/menu/cars/1")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().isNotFound());
   }
 
   @Test
@@ -79,44 +105,22 @@ public class CarsServiceTests {
   }
 
   @Test
-  void canAddNewCarMissingAttributes() {
+  void cantAddNewCarMissingAttributes() throws Exception {
     // given
-    String make = null;
-    Car car = new Car(1L, make, "F100", "yellow", 1986);
-    Exception exception = assertThrows(ApiRequestException.class, () -> {
-      underTest.addNewCar(car);
-    });
 
-    String expectedMessage = "bad request. Mandatory car attributes are missing";
-    String actualMessage = exception.getMessage();
-
-    assertTrue(actualMessage.contains(expectedMessage));
-
+    mockMvc
+        .perform(MockMvcRequestBuilders
+            .post("/api/menu/cars")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().isNotFound());
   }
 
   @Test
-  void cantDeleteCarBecauseDoesNotExist() {
-    // given
-    String make = "ford";
-    Car car = new Car(1L, make, "F100", "yellow", 1986);
-    assertThatThrownBy(() -> underTest.deleteCar(car.getId()))
-        .isInstanceOf(IllegalStateException.class)
-        .hasMessageContaining("car with id " + car.getId() + " does not exist");
-
-  }
-
-  @Test
-  void testUpdateCar() {
-    Long id = 1L;
-    Car car1 = new Car(id, "ford", "F100", "yellow", 1986);
-    Car car2 = new Car(id, "GM", "Avalanche", "yellow", 1986);
-
-    underTest.addNewCar(car1);
-
-    when(carsRepository.findById(1L)).thenReturn(Optional.of(car1));// .thenReturn(null);
-
-    underTest.updateCar(car2);
-
-    assertThat(car1).usingRecursiveComparison().isEqualTo(car2);
+  void testUpdateCar() throws Exception {
+    mockMvc
+        .perform(MockMvcRequestBuilders
+            .post("/api/menu/cars")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(MockMvcResultMatchers.status().isNotFound());
   }
 }
