@@ -57,11 +57,11 @@ public class Car {
 				'}';
 	}
 
-	public void setModel(String model) {
-		this.model = model;
+	public void setCar(Car car) {
+		this.make = car.getMake();
+		this.model = car.getModel();
+		this.colour = car.getColour();
+		this.year = car.getYear();
 	}
 
-	public void setMake(String make) {
-		this.make = make;
-	}
 }

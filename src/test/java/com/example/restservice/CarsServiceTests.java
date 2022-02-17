@@ -89,6 +89,7 @@ public class CarsServiceTests {
 
     String expectedMessage = "bad request. Mandatory car attributes are missing";
     String actualMessage = exception.getMessage();
+
     assertTrue(actualMessage.contains(expectedMessage));
 
   }
@@ -107,11 +108,15 @@ public class CarsServiceTests {
   @Test
   void testUpdateCar() {
     Long id = 1L;
-    Car car = new Car(id, "ford", "F100", "yellow", 1986);
+    Car car1 = new Car(id, "ford", "F100", "yellow", 1986);
     Car car2 = new Car(id, "GM", "Avalanche", "yellow", 1986);
-    underTest.addNewCar(car);
-    when(carsRepository.findById(anyLong())).thenReturn(Optional.of(car)).thenReturn(null);
-    underTest.updateCar(1L, "Avalanche", "GM");
-    assertThat(car).usingRecursiveComparison().isEqualTo(car2);
+
+    underTest.addNewCar(car1);
+
+    when(carsRepository.findById(1L)).thenReturn(Optional.of(car1));// .thenReturn(null);
+
+    underTest.updateCar(car2);
+
+    assertThat(car1).usingRecursiveComparison().isEqualTo(car2);
   }
 }

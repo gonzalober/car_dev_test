@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -25,7 +24,7 @@ public class CarsService {
     return carsRepository.findAll();
   }
 
-  public Optional<Car> getCarsById(Long id) {
+  public Optional<Car> getCarById(Long id) {
     return carsRepository.findById(id);
   }
 
@@ -35,7 +34,7 @@ public class CarsService {
     String colourCar = car.getColour();
     Integer yearCar = car.getYear();
     if (makeCar == null || modelCar == null || colourCar == null || yearCar == null) {
-      throw new ApiRequestException("bad request. Mandatory car attributes are missing");
+      throw new ApiRequestException("bad request. Mandatory car attributes are missing");// 400 move to controller
     }
     carsRepository.save(car);
   }
@@ -50,17 +49,13 @@ public class CarsService {
   }
 
   @Transactional
-  public void updateCar(Long carId, String model, String make) {
-    Car car = carsRepository.findById(carId)
-        .orElseThrow(() -> new IllegalStateException("car with id " + carId + " does not exist"));
+  public void updateCar(Car car) {
 
-    if (model != null && model.length() > 0 && !Objects.equals(car.getModel(), model)) {
-      car.setModel(model);
-    }
+    Car carToUpdate = carsRepository.findById(car.getId())
+        .orElseThrow(() -> new IllegalStateException("car with id " + car.getId() + " does not exist"));
 
-    if (make != null && make.length() > 0 && !Objects.equals(car.getMake(), make)) {
-      car.setMake(make);
-    }
+    carToUpdate.setCar(car);
+
   }
 
 }

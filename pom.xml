@@ -14,7 +14,7 @@
 	<name>rest-service</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 	</properties>
 	<dependencies>
         <dependency>
@@ -47,6 +47,10 @@
 					<version>3.22.0</version>
 					<scope>test</scope>
 			</dependency>
+			<dependency>     
+				<groupId>com.google.code.gson</groupId>     
+				<artifactId>gson</artifactId>     
+			</dependency>    
     </dependencies>
 	<build>
 		<plugins>
