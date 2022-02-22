@@ -16,8 +16,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.exception.ApiRequestException;
-
 @RestController
 @RequestMapping("api/menu/cars")
 public class CarsController {
@@ -41,7 +39,7 @@ public class CarsController {
   public Optional<Car> getCarById(@PathVariable("carId") Long carId) {
     Optional<Car> car = carService.getCarById(carId);
     if (car.isEmpty()) {
-      throw new ApiRequestException("the car " + carId + " does not exist");
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Car with Id '" + carId + "' not found");
     }
     return carService.getCarById(carId);
 
