@@ -1,8 +1,7 @@
 package com.example.restservice;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.Errors;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,13 +9,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+
 import java.util.List;
 import java.util.Optional;
-
-import com.example.exception.ApiRequestException;
 
 @RestController
 @RequestMapping("api/menu/cars")
@@ -38,36 +36,47 @@ public class CarsController {
   // getById
   @GetMapping("{carId}")
   @ResponseBody
-  public Optional<Car> getCarsById(@PathVariable("carId") Long carId) {
-    Optional<Car> car = carService.getCarsById(carId);
-    System.out.println("---->" + car.isEmpty());
+  public Optional<Car> getCarById(@PathVariable("carId") Long carId) {
+    Optional<Car> car = carService.getCarById(carId);
     if (car.isEmpty()) {
-      throw new ApiRequestException("the car " + carId + " doens't exist");
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Car with Id '" + carId + "' not found");
     }
-    return carService.getCarsById(carId);
+    return carService.getCarById(carId);
 
   }
 
   // post
   @PostMapping
   public void addNewCar(@RequestBody Car car) {
+    String makeCar = car.getMake();
+    String modelCar = car.getModel();
+    String colourCar = car.getColour();
+    Integer yearCar = car.getYear();
+    if (makeCar == null || modelCar == null || colourCar == null || yearCar == null) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "bad request. Mandatory car attributes are missing");
+    }
     carService.addNewCar(car);
   }
 
   // delete
   @DeleteMapping("{carId}")
-  public void deleteCar(@PathVariable("carId") Long carId) {
-    System.out.println("HELOO");
+  public void deleteCar(@PathVariable("carId") Long carId) throws ResponseStatusException {
+    Optional<Car> exists = carService.getCarById(carId);
+    if (exists.isEmpty()) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Car with Id '" + carId + "' not found");
+    }
+
     carService.deleteCar(carId);
   }
 
   // put
-  @PutMapping("{carId}")
-  public void updateCar(
-      @PathVariable("carId") Long carId,
-      @RequestParam(required = false) String model,
-      @RequestParam(required = false) String make) {
-    carService.updateCar(carId, model, make);
+  @PutMapping
+  public void updateCar(@RequestBody Car car) {
+    Optional<Car> exists = carService.getCarById(car.getId());
+    if (exists.isEmpty()) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "car with id " + car.getId() + " does not exist");
+    }
+    carService.updateCar(car);
   }
 
 }
