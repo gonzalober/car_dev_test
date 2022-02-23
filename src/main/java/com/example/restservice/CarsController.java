@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,20 +30,39 @@ public class CarsController {
     this.carService = carService;
   }
 
-  // get
-  @GetMapping
-  public List<Car> getCars() throws URISyntaxException {
-    String url = "https://api.datamuse.com/words?sl=jirraf";
+  public ArrayList<String> getWords(String keyword) {
+    String url = "https://api.datamuse.com/words?sl=" + keyword;
 
     RestTemplate restTemplate = new RestTemplate();
 
     Word[] wordList = restTemplate.getForObject(url, Word[].class);
-    System.out.println("====////////////////////////////////======" + wordList.getClass().getName());
-    // Word word = new Word();
-    // System.out.println(word);
+    // System.out.println("====////////////////////////////////======" +
+    // wordList[2].word);
+    ArrayList<String> wordArrayList = new ArrayList<String>();
     for (Word item : wordList) {
-      System.out.println(item.word);
+      // System.out.println(item.word);
+      wordArrayList.add(item.word);
     }
+    // System.out.println("-----" + wordArrayList);
+    return wordArrayList;
+  }
+
+  // get
+  @GetMapping
+  public List<Car> getCars() {
+
+    // System.out.println(getWords("focus"));
+    // System.out.println(carService.getCars());
+    List<Car> carsss = carService.getCars();
+    // carsss.iterator();
+    ArrayList<String> modelWordArrayList = new ArrayList<String>();
+    for (Car item : carsss) {
+      System.out.println(carsss);
+      System.out.println(item.getModel());
+      modelWordArrayList.addAll(getWords(item.getModel()));
+    }
+    System.out.println(modelWordArrayList);
+    System.out.println(modelWordArrayList.size());
     return carService.getCars();
   }
 

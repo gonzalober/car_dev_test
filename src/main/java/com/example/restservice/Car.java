@@ -15,6 +15,8 @@ public class Car {
 	private String colour;
 	private Integer year;
 
+	// public Object datamusObject;
+
 	public Car() {
 	}
 
@@ -24,6 +26,7 @@ public class Car {
 		this.model = model;
 		this.colour = colour;
 		this.year = year;
+		// this.datamusObject = datamusObject;
 	}
 
 	public Long getId() {
