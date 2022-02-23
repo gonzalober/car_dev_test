@@ -11,13 +11,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("api/menu/cars")
+@RequestMapping("api/cars")
 public class CarsController {
 
   private final CarsService carService;
@@ -29,7 +31,18 @@ public class CarsController {
 
   // get
   @GetMapping
-  public List<Car> getCars() {
+  public List<Car> getCars() throws URISyntaxException {
+    String url = "https://api.datamuse.com/words?sl=jirraf";
+
+    RestTemplate restTemplate = new RestTemplate();
+
+    Word[] wordList = restTemplate.getForObject(url, Word[].class);
+    System.out.println("====////////////////////////////////======" + wordList.getClass().getName());
+    // Word word = new Word();
+    // System.out.println(word);
+    for (Word item : wordList) {
+      System.out.println(item.word);
+    }
     return carService.getCars();
   }
 
