@@ -1,5 +1,7 @@
 package com.example.restservice;
 
+import java.util.List;
+
 import javax.persistence.*;
 
 @Entity
@@ -14,19 +16,27 @@ public class Car {
 	private String model;
 	private String colour;
 	private Integer year;
-
-	// public Object datamusObject;
+	@Transient
+	private List<String> soundLikeWord;
 
 	public Car() {
 	}
 
-	public Car(Long id, String make, String model, String colour, Integer year) {
+	public Car(Long id, String make, String model, String colour, Integer year, List<String> soundLikeWord) {
 		this.id = id;
 		this.make = make;
 		this.model = model;
 		this.colour = colour;
 		this.year = year;
-		// this.datamusObject = datamusObject;
+		this.soundLikeWord = soundLikeWord;
+	}
+
+	public List<String> getSoundLikeWord() {
+		return soundLikeWord;
+	}
+
+	public void setSoundLikeWord(List<String> soundLikeWord) {
+		this.soundLikeWord = soundLikeWord;
 	}
 
 	public Long getId() {
@@ -65,6 +75,7 @@ public class Car {
 		this.model = car.getModel();
 		this.colour = car.getColour();
 		this.year = car.getYear();
+		this.soundLikeWord = car.getSoundLikeWord();
 	}
 
 }

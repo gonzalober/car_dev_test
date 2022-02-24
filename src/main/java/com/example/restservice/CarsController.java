@@ -15,7 +15,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,14 +35,10 @@ public class CarsController {
     RestTemplate restTemplate = new RestTemplate();
 
     Word[] wordList = restTemplate.getForObject(url, Word[].class);
-    // System.out.println("====////////////////////////////////======" +
-    // wordList[2].word);
     ArrayList<String> wordArrayList = new ArrayList<String>();
     for (Word item : wordList) {
-      // System.out.println(item.word);
       wordArrayList.add(item.word);
     }
-    // System.out.println("-----" + wordArrayList);
     return wordArrayList;
   }
 
@@ -51,18 +46,13 @@ public class CarsController {
   @GetMapping
   public List<Car> getCars() {
 
-    // System.out.println(getWords("focus"));
-    // System.out.println(carService.getCars());
     List<Car> carsss = carService.getCars();
-    // carsss.iterator();
-    ArrayList<String> modelWordArrayList = new ArrayList<String>();
+
     for (Car item : carsss) {
-      System.out.println(carsss);
-      System.out.println(item.getModel());
+      ArrayList<String> modelWordArrayList = new ArrayList<String>();
       modelWordArrayList.addAll(getWords(item.getModel()));
+      item.setSoundLikeWord(modelWordArrayList);
     }
-    System.out.println(modelWordArrayList);
-    System.out.println(modelWordArrayList.size());
     return carService.getCars();
   }
 
